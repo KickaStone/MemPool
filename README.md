@@ -136,6 +136,24 @@ span中最后一个变量`size_t _usecount`用出多少块，既可以用来计�
 
 ### 使用专业性能测试工具进行测试
 
+#### perf 手动采集
+
+[BUG] Ubuntu 6.14.0-33-generic 在apt-get 安装了指定的版本后无法运行，是一个挺久的[bug](https://askubuntu.com/questions/1553558/cannot-call-perf-on-ubntu-24-04)
+
+可以使用论坛里提供的[脚本](https://gist.github.com/karlivory/9111f906f4eb06370b2b237c62a6b00e)(也就是本仓库build-perf.sh)自行编译perf。
+
+```shell
+# 采集数据
+sudo perf record -F 99 -g --call-graph dwarf ./benchmark &
+# 绘制火焰图
+cd ./build && sudo perf script | ./FlameGraph/stackcollapse-perf.pl | ./FlameGraph/flamegraph.pl > flamegraph.svg
+```
+
+
+
+#### CLion 使用性能分析器
+参考
+https://www.jetbrains.com/help/clion/2025.2/cpu-profiler.html#Prerequisites
 
 ### perf 报告分析
 ```
@@ -176,8 +194,7 @@ tcmalloc使用基数树替代了`unordered_map`，但是64位机不能使用单�
 ================================================
 ```
 
-优化后有明显的降低，但还无法超过malloc，火焰图
+优化后有明显的降低，速度提升约88%，但还无法超过malloc，malloc运行时间是我们的1/4, 火焰图如下
 
 ![](/v2/images/优化后.svg)
 
-速度提升约88%。

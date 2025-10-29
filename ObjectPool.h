@@ -1,7 +1,4 @@
-#pragma once
-
 /*定长内存池*/
-
 #include<iostream>
 #include "Common.h"
 using std::cout;
