@@ -1,6 +1,6 @@
 # 高性能高并发内存池（仿tcmalloc）
 
-参考: https://blog.csdn.net/m0_62782700/article/details/135443352
+本项目绝大部分内容参考博客[【项目】九万字手把手教你写高并发内存池（化简版tcmalloc）](https://blog.csdn.net/m0_62782700/article/details/135443352)
 
 ## 难题
 1. 锁竞争
