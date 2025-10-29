@@ -169,12 +169,7 @@ Overhead  Command    Shared Object         Symbol
 
 可以看到`MapOpjectToSpan`存在明显性能问题，主要原因就是互斥锁的使用导致锁竞争激烈。
 
-### 基数树优化
-
-tcmalloc使用基数树替代了`unordered_map`，但是64位机不能使用单层基数树，必须使用三层，只能以后实现。
-
-
-### 使用基数树进行优化unordered_map
+### 使用基数树进行优化带锁unordered_map的并发性能问题
 
 ```
 ================================================
