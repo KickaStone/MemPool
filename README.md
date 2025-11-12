@@ -1,6 +1,7 @@
 # 高性能高并发内存池（仿tcmalloc）
 
 本项目绝大部分内容参考博客[【项目】九万字手把手教你写高并发内存池（化简版tcmalloc）](https://blog.csdn.net/m0_62782700/article/details/135443352)
+⚠️ 本项目仅用于学习，请勿在生产环境中使用 ⚠️
 
 ## 难题
 1. 锁竞争
@@ -187,7 +188,7 @@ Overhead  Command    Shared Object         Symbol
 
 ## 优化定长内存池，改用无锁实现
 
-[细节](./无锁定长内存池实现.md) 
+[细节](./lockfree.md) 
 
 完成后的内存池性能进一步提升，在多轮内存分配回收测试中明显优于malloc。
 ```
