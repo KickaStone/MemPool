@@ -39,14 +39,17 @@ add_compile_options(-g)
 add_executable(benchmark benchmark.cpp ${SOURCES} ${HEADERS})
 
 # Create executable for testing
-add_executable(mempool_test UnitTest.cpp ${SOURCES} ${HEADERS})
+add_executable(unit_test UnitTest.cpp ${SOURCES} ${HEADERS})
+
+add_executable(object_pool_test ObjectpoolUnitTest.cpp ${SOURCES} ${HEADERS})
 
 # Find and link pthread
 find_package(Threads REQUIRED)
-target_link_libraries(mempool_test PRIVATE Threads::Threads)
+target_link_libraries(unit_test PRIVATE Threads::Threads)
+target_link_libraries(object_pool_test PRIVATE Threads::Threads)
 
 # Set include directories
-target_include_directories(mempool_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(unit_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Enable testing
 enable_testing()
