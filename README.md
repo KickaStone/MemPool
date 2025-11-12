@@ -186,3 +186,26 @@ Overhead  Command    Shared Object         Symbol
 
 ![](./images/优化后.svg)
 
+## 优化定长内存池，改用无锁实现
+
+[细节](./无锁定长内存池实现.md) 
+
+完成后的内存池性能进一步提升，尤其在多轮内存分配回收测试中明显优于malloc。
+
+```
+================================================
+10 threads || 1000 rounds || 10000 malloc : cost 201003 ms
+10 threads || 1000 rounds || 10000 free : cost 58751 ms
+10 threads || 1000 rounds || 10000 malloc&free : cost 259755 ms
+
+
+10 threads || 1000 rounds || 10000 ConcurrentAlloc : cost 30426 ms
+10 threads || 1000 rounds || 10000 ConcurrentFree : cost 34683 ms
+10 threads || 1000 rounds || 10000 ConcurrentAlloc&ConcurrentFree : cost 65109 ms
+================================================
+```
+
+## TODO
+
+- [ ] 大内存分配，优化超过单页的内存分配请求
+- [ ] 易用性，内存分配器 
