@@ -171,27 +171,25 @@ Overhead  Command    Shared Object         Symbol
 
 ```
 ================================================
-4 threads || 10 rounds || 10000 malloc : cost 73758 ms
-4 threads || 10 rounds || 10000 free : cost 49652 ms
-4 threads || 10 rounds || 10000 malloc&free : cost 123410 ms
+10 threads || 1000 rounds || 10000 malloc : cost 213229 ms
+10 threads || 1000 rounds || 10000 free : cost 60122 ms
+10 threads || 1000 rounds || 10000 malloc&free : cost 273352 ms
 
 
-4 threads || 10 rounds || 10000 ConcurrentAlloc : cost 281463 ms
-4 threads || 10 rounds || 10000 ConcurrentFree : cost 187484 ms
-4 threads || 10 rounds || 10000 ConcurrentAlloc&ConcurrentFree : cost 468947 ms
+10 threads || 1000 rounds || 10000 ConcurrentAlloc : cost 79772 ms
+10 threads || 1000 rounds || 10000 ConcurrentFree : cost 70997 ms
+10 threads || 1000 rounds || 10000 ConcurrentAlloc&ConcurrentFree : cost 150770 ms
 ================================================
 ```
 
-优化后benchmark提升明显，速度提升约88%，但还无法超过malloc，火焰图
-
+优化后benchmark提升明显，速度提升明显，但还无法超过malloc，火焰图:
 ![](./images/优化后.svg)
 
 ## 优化定长内存池，改用无锁实现
 
 [细节](./无锁定长内存池实现.md) 
 
-完成后的内存池性能进一步提升，尤其在多轮内存分配回收测试中明显优于malloc。
-
+完成后的内存池性能进一步提升，在多轮内存分配回收测试中明显优于malloc。
 ```
 ================================================
 10 threads || 1000 rounds || 10000 malloc : cost 201003 ms
