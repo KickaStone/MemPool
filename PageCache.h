@@ -26,8 +26,8 @@ private:
 
 private:
     static PageCache _sInst;
-    SpanList _spanLists[PAGE_NUM];
-    ObjectPool<Span> _spanPool;
+    SpanList _spanLists[PAGE_NUM]; // 每个桶是一个spanList, 存的是idx个页大小的span
+    lockfree::ObjectPool<Span> _spanPool;
     // std::unordered_map<PageId, Span*> _idSpanMap; // 记录pageId和span的映射关系，避免每次都要遍历spanList
     // 在NewSpan中分配出去的时候记录pageId和span的映射关系
 #if defined(__LP64__) || defined(_WIN64) 

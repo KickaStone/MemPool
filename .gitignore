@@ -1,4 +1,8 @@
 /build
+/debug
 /cmake-build-debug
 /.vscode
 /.idea
+/FlameGraph
+perf*
+/output

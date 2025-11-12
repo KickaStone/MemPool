@@ -32,9 +32,9 @@ Span *PageCache::NewSpan(size_t k)
             /* 将nSpan切分成一个k页的span和一个n-k页的span */
 
             // Span的空间需要新建， 而不是用当前内存池中的空间
-            _spanPool._poolMtx.lock();
+            // _spanPool._poolMtx.lock();
             Span *kSpan = _spanPool.New();
-            _spanPool._poolMtx.unlock();
+            // _spanPool._poolMtx.unlock();
             // Span *kSpan = new Span;  
 
             // 分一个k页的span叫kSpan
@@ -72,10 +72,7 @@ Span *PageCache::NewSpan(size_t k)
     /* 走到这里说明没有128页的span， 需要向系统申请128页的span */
     void *ptr = SystemAlloc(PAGE_NUM - 1); // PAGE_NUM为129
 
-    // Span *bigSpan = new Span;
-    _spanPool._poolMtx.lock();
     Span *bigSpan = _spanPool.New();
-    _spanPool._poolMtx.unlock();
 
     // 只需要修改bigSpan的_pageId和_n
     bigSpan->_pageId = (PageId)ptr >> PAGE_SHIFT;

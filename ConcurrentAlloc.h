@@ -10,10 +10,8 @@ void *ConcurrentAlloc(size_t size){
 
     if(pTLSThreadCache == nullptr){ // 不存在线程安全问题，每个线程相互独立
         // pTLSThreadCache = new ThreadCache; // 每个线程独立， 所以需要new
-        static ObjectPool<ThreadCache> threadCachePool;
-        threadCachePool._poolMtx.lock();
+        static lockfree::ObjectPool<ThreadCache> threadCachePool;
         pTLSThreadCache = threadCachePool.New();
-        threadCachePool._poolMtx.unlock();
     }
     return pTLSThreadCache->Allocate(size);
 }

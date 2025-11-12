@@ -73,6 +73,7 @@ public:
         return _freeList == nullptr;
     }
 
+    // 获取当前能够申请的最大块空间
     size_t& MaxSize()
     {
         return _maxSize;

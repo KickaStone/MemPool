@@ -106,7 +106,7 @@ public:
 
 			// 如果没开好就开空间
 			if (root_[i1] == NULL) {
-				static ObjectPool<Leaf>	leafPool;
+				static lockfree::ObjectPool<Leaf>	leafPool;
 				// leafPool._poolMtx.lock();
 				Leaf* leaf = (Leaf*)leafPool.New();
 				// leafPool._poolMtx.unlock();
@@ -186,19 +186,15 @@ public:
 		const Number i3 = k & (LEAF_LENGTH - 1); // leaf
 		
 		if(root_[i1] == NULL){
-			static ObjectPool<Middle> middlePool;
-			// middlePool._poolMtx.lock();
+			static lockfree::ObjectPool<Middle> middlePool;
 			Middle* middle = (Middle*)middlePool.New();
-			// middlePool._poolMtx.unlock();
 			memset(middle, 0, sizeof(*middle));
 			root_[i1] = middle;
 		}
 		
 		if(root_[i1]->values[i2] == NULL){
-			static ObjectPool<Leaf>	leafPool;
-			// leafPool._poolMtx.lock();
+			static lockfree::ObjectPool<Leaf>	leafPool;
 			Leaf* leaf = (Leaf*)leafPool.New();
-			// leafPool._poolMtx.unlock();
 			memset(leaf, 0, sizeof(*leaf));
 			root_[i1]->values[i2] = leaf;
 		}

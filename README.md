@@ -144,8 +144,6 @@ sudo perf record -F 99 -g --call-graph dwarf ./benchmark &
 cd ./build && sudo perf script | ./FlameGraph/stackcollapse-perf.pl | ./FlameGraph/flamegraph.pl > flamegraph.svg
 ```
 
-
-
 #### CLion 使用性能分析器
 参考
 https://www.jetbrains.com/help/clion/2025.2/cpu-profiler.html#Prerequisites

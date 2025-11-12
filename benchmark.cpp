@@ -34,7 +34,8 @@ long long BenchmarkMalloc(int ntimes, size_t nworks, size_t rounds)
                 size_t begin1 = clock();
 
                 for(size_t j = 0; j < ntimes; ++j){
-                    v.push_back(malloc(16));
+                    // v.push_back(malloc(16));
+                    v.push_back(malloc((16 + i) % 4096 + 1));// 每一次申请不同桶中的块
                 }
                 size_t end1 = clock();
 
@@ -58,9 +59,9 @@ long long BenchmarkMalloc(int ntimes, size_t nworks, size_t rounds)
         t.join();
     }
 
-    printf("%zu threads || %zu rounds || %zu malloc : cost %zu ms\n", nworks, rounds, ntimes, malloc_costtime.load());
-    printf("%zu threads || %zu rounds || %zu free : cost %zu ms\n", nworks, rounds, ntimes, free_costtime.load());
-    printf("%zu threads || %zu rounds || %zu malloc&free : cost %zu ms\n", nworks, rounds, ntimes, malloc_costtime.load() + free_costtime.load());
+    printf("%zu threads || %zu rounds || %zu malloc : cost %zu ms\n", nworks, rounds, ntimes, 1000* malloc_costtime.load() / CLOCKS_PER_SEC );
+    printf("%zu threads || %zu rounds || %zu free : cost %zu ms\n", nworks, rounds, ntimes, 1000* free_costtime.load() / CLOCKS_PER_SEC );
+    printf("%zu threads || %zu rounds || %zu malloc&free : cost %zu ms\n", nworks, rounds, ntimes, 1000* (malloc_costtime.load() + free_costtime.load()) / CLOCKS_PER_SEC );
 
     return malloc_costtime.load() + free_costtime.load();
 }
@@ -83,7 +84,8 @@ long long BenchmarkConcurrentAlloc(int ntimes, size_t nworks, size_t rounds)
                 size_t begin1 = clock();
 
                 for(size_t j = 0; j < ntimes; ++j){
-                    v.push_back(ConcurrentAlloc(16));
+                    // v.push_back(ConcurrentAlloc(16));
+                    v.push_back(ConcurrentAlloc((16 + i) % 4096 + 1));
                 }
                 size_t end1 = clock();
                 size_t begin2 = clock();
@@ -106,31 +108,29 @@ long long BenchmarkConcurrentAlloc(int ntimes, size_t nworks, size_t rounds)
         t.join();
     }
 
-    printf("%zu threads || %zu rounds || %zu ConcurrentAlloc : cost %zu ms\n", nworks, rounds, ntimes, malloc_costtime.load());
-    printf("%zu threads || %zu rounds || %zu ConcurrentFree : cost %zu ms\n", nworks, rounds, ntimes, free_costtime.load());
-    printf("%zu threads || %zu rounds || %zu ConcurrentAlloc&ConcurrentFree : cost %zu ms\n", nworks, rounds, ntimes, malloc_costtime.load() + free_costtime.load());
+    printf("%zu threads || %zu rounds || %zu ConcurrentAlloc : cost %zu ms\n", nworks, rounds, ntimes, 1000* malloc_costtime.load() / CLOCKS_PER_SEC );
+    printf("%zu threads || %zu rounds || %zu ConcurrentFree : cost %zu ms\n", nworks, rounds, ntimes, 1000* free_costtime.load() / CLOCKS_PER_SEC );
+    printf("%zu threads || %zu rounds || %zu ConcurrentAlloc&ConcurrentFree : cost %zu ms\n", nworks, rounds, ntimes, 1000* (malloc_costtime.load() + free_costtime.load()) / CLOCKS_PER_SEC );
     return malloc_costtime.load() + free_costtime.load();
 }
 
 int main(int argc, char *argv[])
 {
-    // if (argc != 4)
-    // {
-    //     cout << "Usage: " << argv[0] << " <ntimes> <nworks> <rounds>" << endl;
-    //     return 1;
-    // }
+    if (argc != 5)
+    {
+        cout << "Usage: " << argv[0] << " <ntimes> <nworks> <rounds> <enable_malloc>" << endl;
+        return 1;
+    }
 
-    // size_t ntimes = atoi(argv[1]);
-    // size_t nworks = atoi(argv[2]);
-    // size_t rounds = atoi(argv[3]);
+    size_t ntimes = atoi(argv[1]);
+    size_t nworks = atoi(argv[2]);
+    size_t rounds = atoi(argv[3]);
+    bool enable_malloc = atoi(argv[4]);
 
-    size_t ntimes = 50000;
-    size_t nworks = 4;
-    size_t rounds = 1000;
     cout << "================================================" << endl;
-    // long long malloc_costtime = BenchmarkMalloc(ntimes, nworks, rounds);
-    // cout << endl
-    //      << endl;
+    long long malloc_costtime = enable_malloc ? BenchmarkMalloc(ntimes, nworks, rounds) : 0;
+    cout << endl
+         << endl;
 
     long long concurrent_costtime = BenchmarkConcurrentAlloc(ntimes, nworks, rounds);
 

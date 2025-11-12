@@ -13,7 +13,6 @@ void *ThreadCache::Allocate(size_t size)
     }else{
         return FetchFromCentralCache(index, alignSize); // 从中心缓存获取空间
     }
-
 }
 
 void ThreadCache::Deallocate(void *ptr, size_t alignSize)
@@ -32,13 +31,13 @@ void ThreadCache::Deallocate(void *ptr, size_t alignSize)
 void* ThreadCache::FetchFromCentralCache(size_t index, size_t alignSize)
 {
     // 实现SizeClass::NumMoveSize(size)后，再实现
+    // 获取需要从cc获取的块数
     size_t batchNum = std::min(_freeLists[index].MaxSize(), SizeClass::NumMoveSize(alignSize));
 
+    // 反馈调节算法，如果当前块数达到上限，则下次多给一块
     if(batchNum == _freeLists[index].MaxSize()){
-        _freeLists[index].MaxSize() += 1; // 下次多给一块
+        _freeLists[index].MaxSize() += 1;
     }
-
-    /* 上面就是慢开始反馈调节算法 */
 
     // 从cc获取batchNum个size大小的空间
     void* start = nullptr;
